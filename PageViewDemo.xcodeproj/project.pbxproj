@@ -13,6 +13,8 @@
 		3CABE78B2289135800088D40 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CABE78A2289135800088D40 /* Assets.xcassets */; };
 		3CABE78E2289135800088D40 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CABE78C2289135800088D40 /* LaunchScreen.storyboard */; };
 		3CABE7912289135800088D40 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CABE7902289135800088D40 /* main.m */; };
+		3CABE79A2289137D00088D40 /* PageTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CABE7992289137D00088D40 /* PageTitleView.m */; };
+		3CABE7A0228956BE00088D40 /* PageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CABE79F228956BE00088D40 /* PageViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,10 @@
 		3CABE78D2289135800088D40 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3CABE78F2289135800088D40 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3CABE7902289135800088D40 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3CABE7982289137D00088D40 /* PageTitleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PageTitleView.h; sourceTree = "<group>"; };
+		3CABE7992289137D00088D40 /* PageTitleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PageTitleView.m; sourceTree = "<group>"; };
+		3CABE79E228956BE00088D40 /* PageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PageViewController.h; sourceTree = "<group>"; };
+		3CABE79F228956BE00088D40 /* PageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PageViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,8 +64,11 @@
 		3CABE7802289134300088D40 /* PageViewDemo */ = {
 			isa = PBXGroup;
 			children = (
+				3CABE7972289136300088D40 /* PageView */,
 				3CABE7812289134300088D40 /* AppDelegate.h */,
 				3CABE7822289134300088D40 /* AppDelegate.m */,
+				3CABE79E228956BE00088D40 /* PageViewController.h */,
+				3CABE79F228956BE00088D40 /* PageViewController.m */,
 				3CABE7842289134300088D40 /* ViewController.h */,
 				3CABE7852289134300088D40 /* ViewController.m */,
 				3CABE7872289134300088D40 /* Main.storyboard */,
@@ -69,6 +78,15 @@
 				3CABE7902289135800088D40 /* main.m */,
 			);
 			path = PageViewDemo;
+			sourceTree = "<group>";
+		};
+		3CABE7972289136300088D40 /* PageView */ = {
+			isa = PBXGroup;
+			children = (
+				3CABE7982289137D00088D40 /* PageTitleView.h */,
+				3CABE7992289137D00088D40 /* PageTitleView.m */,
+			);
+			path = PageView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,9 +159,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CABE79A2289137D00088D40 /* PageTitleView.m in Sources */,
 				3CABE7862289134300088D40 /* ViewController.m in Sources */,
 				3CABE7912289135800088D40 /* main.m in Sources */,
 				3CABE7832289134300088D40 /* AppDelegate.m in Sources */,
+				3CABE7A0228956BE00088D40 /* PageViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

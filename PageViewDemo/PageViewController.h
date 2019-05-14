@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PageViewController : UIViewController
 
+@property (nonatomic,copy)NSString * title;
 @end
 
 NS_ASSUME_NONNULL_END

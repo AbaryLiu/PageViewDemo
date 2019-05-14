@@ -16,17 +16,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor whiteColor];
+    UILabel * label = [[UILabel alloc] initWithFrame:self.view.bounds];
+    label.text = [NSString stringWithFormat:@"这个页面的标题是 %@",self.title];
+    label.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:label];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
