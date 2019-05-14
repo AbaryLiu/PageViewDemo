@@ -1,5 +1,6 @@
 # 这个简单的列表滚动页面，头部使用scrollView，内容使用collectionView
 # 使用简单，主题内容在PageTitleView（标题文件）、PageContentView（内容文件）
+![image](https://github.com/AbaryLiu/PageViewDemo/blob/master/2019-05-14%2014-23-59.2019-05-14%2014_24_56.gif)
 ## 头部标题简单使用
 ```
  CGFloat statusBarH = [[UIApplication sharedApplication] statusBarFrame].size.height;
