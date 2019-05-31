@@ -3,7 +3,7 @@
 ![image](https://github.com/AbaryLiu/PageViewDemo/blob/master/2019-05-14%2014-23-59.2019-05-14%2014_24_56.gif)
 ## 头部标题简单使用
 ```
- CGFloat statusBarH = [[UIApplication sharedApplication] statusBarFrame].size.height;
+    CGFloat statusBarH = [[UIApplication sharedApplication] statusBarFrame].size.height;
     NSArray * titles = @[@"推荐",@"游戏",@"娱乐",@"音频",@"视频"];
     //设置标题属性
     PageTitleViewConfigure * configure = [PageTitleViewConfigure new];
