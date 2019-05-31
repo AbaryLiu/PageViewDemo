@@ -5,18 +5,20 @@
 ```
  CGFloat statusBarH = [[UIApplication sharedApplication] statusBarFrame].size.height;
     NSArray * titles = @[@"推荐",@"游戏",@"娱乐",@"音频",@"视频"];
-    _titleView = [[PageTitleView alloc] initWithFrame:CGRectMake(0, statusBarH, self.view.frame.size.width, 50) titles:titles];
-    _titleView.delegate = self;
+    //设置标题属性
+    PageTitleViewConfigure * configure = [PageTitleViewConfigure new];
+    configure.titleFont = 12;
+    configure.titleNormalColor = [UIColor grayColor];
+    configure.titleSelectColor = [UIColor redColor];
+    configure.lineColor = [UIColor redColor];
+    configure.lineHight = 2;
+    
+    _titleView = [PageTitleView pageTitleViewWithframe:CGRectMake(0, statusBarH, self.view.frame.size.width, 50) delegate:self titles:titles configure:configure];
+    // 字体缩放
+    _titleView.isTextZoom = YES;
+    // 字体颜色渐变
+    _titleView.isGradientEffect = YES;
     [self.view addSubview:_titleView];
-```
-## 设置标题样式
-```
-    _titleView.titleNormalFont = 12;
-    _titleView.titleSelectFont = 15;
-    _titleView.titleNormalColor = [UIColor grayColor];
-    _titleView.titleSelectColor = [UIColor redColor];
-    _titleView.lineColor = [UIColor redColor];
-    _titleView.lineHight = 2;
 ```
 ## 内容初始化
 ```
