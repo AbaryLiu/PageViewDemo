@@ -8,11 +8,60 @@
 
 #import "PageTitleView.h"
 
+@implementation PageTitleViewConfigure
+
+- (UIColor *)lineColor {
+    if (!_lineColor) {
+        _lineColor = [UIColor orangeColor];
+    }
+    return _lineColor;
+}
+
+- (CGFloat)lineHight {
+    if (_lineHight <= 0) {
+        _lineHight = 2.f;
+    }
+    return _lineHight;
+}
+
+- (NSInteger)titleNormalFont {
+    if (_titleNormalFont <= 0) {
+        _titleNormalFont = 12;
+    }
+    return _titleNormalFont;
+}
+
+- (NSInteger)titleSelectFont {
+    if (_titleSelectFont <= 0) {
+        _titleSelectFont = 12;
+    }
+    return _titleSelectFont;
+}
+
+- (UIColor *)titleNormalColor {
+    if (!_titleNormalColor) {
+        _titleNormalColor = [UIColor blackColor];
+    }
+    return _titleNormalColor;
+}
+
+- (UIColor *)titleSelectColor {
+    if (!_titleSelectColor) {
+        _titleSelectColor = [UIColor orangeColor];
+    }
+    return _titleSelectColor;
+}
+
+@end
+
+
+
 @interface PageTitleView ()
 
 @property (nonatomic,strong)UIScrollView *scrollView;
 @property (nonatomic,strong)UIView *scrollLine;
 @property (nonatomic,strong)NSMutableArray <UILabel *>*titleLabels;
+@property (nonatomic,strong)PageTitleViewConfigure *configure;
 @property (nonatomic,copy)NSArray * titles;
 @property (nonatomic,assign)NSInteger currentIndex;
 @property (nonatomic, strong) NSArray<NSNumber *> *titleSelectColorGRBAArray;
@@ -23,24 +72,22 @@
 
 @implementation PageTitleView
 
-- (instancetype)initWithFrame:(CGRect)frame titles:(NSArray *)titles
+- (instancetype)initWithFrame:(CGRect)frame titles:(NSArray *)titles configure:(PageTitleViewConfigure *)configure
 {
     self = [super initWithFrame:frame];
     if (self) {
         self.titles = titles;
-        [self config];
+        self.configure = configure;
+        [self ComponentConfig];
         [self setUpUI];
     }
     return self;
 }
 
-- (void)config {
-    _titleNormalFont = _titleSelectFont = 16;
-    _titleNormalColor = [UIColor blackColor];
-    _titleSelectColor = _lineColor = [UIColor orangeColor];
-    _lineHight = 2;
-    _titleSelectColorGRBAArray = [self getRGBAComponentsWithColor:[UIColor orangeColor]];
-    _titleNormalColorRGBAArray = [self getRGBAComponentsWithColor:[UIColor blackColor]];
+- (void)ComponentConfig {
+ 
+    _titleSelectColorGRBAArray = [self getRGBAComponentsWithColor:self.configure.titleSelectColor];
+    _titleNormalColorRGBAArray = [self getRGBAComponentsWithColor:self.configure.titleNormalColor];
 }
 
 - (void)setUpUI {
@@ -54,15 +101,15 @@
 - (void)setUpTitleLabels {
     
     CGFloat labelW = self.frame.size.width/self.titles.count;
-    CGFloat labelH = self.frame.size.height - _lineHight;
+    CGFloat labelH = self.frame.size.height - self.configure.lineHight;
     CGFloat labelY = 0;
     
     for (int i = 0; i < self.titles.count; i ++) {
         UILabel * label = [UILabel new];
         label.text = self.titles[i];
         label.tag = i;
-        label.font = [UIFont systemFontOfSize:_titleNormalFont];
-        label.textColor = _titleNormalColor;
+        label.font = [UIFont systemFontOfSize:self.configure.titleNormalFont];
+        label.textColor = self.configure.titleNormalColor;
         label.textAlignment = NSTextAlignmentCenter;
         
         CGFloat labelX = labelW * i;
@@ -86,10 +133,10 @@
     
     if (self.titleLabels.count > 0) {
         UILabel * firstLabel = self.titleLabels.firstObject;
-        firstLabel.textColor = _titleSelectColor;
+        firstLabel.textColor = self.configure.titleSelectColor;
         
         [self.scrollView addSubview:self.scrollLine];
-        self.scrollLine.frame = CGRectMake(firstLabel.frame.origin.x, self.frame.size.height - _lineHight, firstLabel.frame.size.width, _lineHight);
+        self.scrollLine.frame = CGRectMake(firstLabel.frame.origin.x, self.frame.size.height - self.configure.lineHight, firstLabel.frame.size.width, self.configure.lineHight);
     }
 }
 
@@ -103,10 +150,7 @@
             return;
         }
         UILabel * oldLabel = self.titleLabels[_currentIndex];
-        
         [self setupLabelStatus:oldLabel targetLabel:currentLabel];
-        oldLabel.textColor = _titleNormalColor;
-        currentLabel.textColor = _titleSelectColor;
         
         _currentIndex = currentLabel.tag;
         
@@ -168,10 +212,12 @@
 
 - (void)setupLabelStatus:(UILabel *)sourceLabel targetLabel:(UILabel *)targetLabel  {
 
-    sourceLabel.font = [UIFont systemFontOfSize:_titleNormalFont];
-    targetLabel.font = [UIFont systemFontOfSize:_titleSelectFont];
+    sourceLabel.font = [UIFont systemFontOfSize:self.configure.titleNormalFont];
+    targetLabel.font = [UIFont systemFontOfSize:self.configure.titleSelectFont];
+    sourceLabel.textColor = self.configure.titleNormalColor;
+    targetLabel.textColor = self.configure.titleSelectColor;
     CGRect frame = self.scrollLine.frame;
-    frame.size.height = _lineHight;
+    frame.size.height = self.configure.lineHight;
     self.scrollLine.frame = frame;
 }
 
@@ -196,59 +242,13 @@
 - (UIView *)scrollLine {
     if (!_scrollLine) {
         _scrollLine = [UIView new];
-        _scrollLine.backgroundColor = [UIColor orangeColor];
+        _scrollLine.backgroundColor = self.configure.lineColor;
     }
     return _scrollLine;
 }
 
-- (void)setLineColor:(UIColor *)lineColor {
-    _lineColor = lineColor;
-    _scrollLine.backgroundColor = lineColor;
-}
 
-- (void)setLineHight:(CGFloat)lineHight {
-    _lineHight = lineHight;
-    CGRect frame = self.scrollLine.frame;
-    frame.size.height = _lineHight;
-    frame.origin.y = self.frame.size.height - lineHight;
-    self.scrollLine.frame = frame;
-}
-
-- (void)setTitleNormalFont:(NSInteger)titleNormalFont {
-    _titleNormalFont = titleNormalFont;
-    for (UILabel * label in self.titleLabels) {
-        if (label == self.titleLabels[_currentIndex]) {
-            continue;
-        }
-        label.font = [UIFont systemFontOfSize:titleNormalFont];
-    }
-}
-
-- (void)setTitleSelectFont:(NSInteger)titleSelectFont {
-    _titleSelectFont = titleSelectFont;
-    UILabel * selectLabel = self.titleLabels[_currentIndex];
-    selectLabel.font = [UIFont systemFontOfSize:titleSelectFont];
-}
-
-- (void)setTitleNormalColor:(UIColor *)titleNormalColor {
-    _titleNormalColor = titleNormalColor;
-    for (UILabel * label in self.titleLabels) {
-        if (label == self.titleLabels[_currentIndex]) {
-            continue;
-        }
-        label.textColor = titleNormalColor;
-    }
-    _titleNormalColorRGBAArray = [self getRGBAComponentsWithColor:titleNormalColor];
-}
-
-- (void)setTitleSelectColor:(UIColor *)titleSelectColor {
-    _titleSelectColor = titleSelectColor;
-    UILabel * selectLabel = self.titleLabels[_currentIndex];
-    selectLabel.textColor = titleSelectColor;
-    _titleSelectColorGRBAArray = [self getRGBAComponentsWithColor:titleSelectColor];
-}
-
-
+// 渐变颜色
 - (NSArray<NSNumber *> *)getRGBAComponentsWithColor:(UIColor *)color {
     CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
     unsigned char resultingPixel[4];

@@ -17,9 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface PageTitleView : UIView
 
-@property (nonatomic,assign)id<PageTitleViewDelegate> delegate;
+@interface PageTitleViewConfigure : NSObject
 
 //其他设置
 @property (nonatomic,assign)CGFloat lineHight;
@@ -29,8 +28,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign)NSInteger titleNormalFont;
 @property (nonatomic,assign)NSInteger titleSelectFont;
 
+@end
 
-- (instancetype)initWithFrame:(CGRect)frame titles:(NSArray *)titles;
+
+@interface PageTitleView : UIView
+
+@property (nonatomic,assign)id<PageTitleViewDelegate> delegate;
+
+
+- (instancetype)initWithFrame:(CGRect)frame titles:(NSArray *)titles configure:(PageTitleViewConfigure *)configure;
 - (void)setTitleWithProgress:(CGFloat)progress sourceIndex:(NSInteger)sourceIndex targetIndex:(NSInteger)targetIndex;
 @end
 
