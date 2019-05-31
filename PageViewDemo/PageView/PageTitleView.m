@@ -24,19 +24,13 @@
     return _lineHight;
 }
 
-- (NSInteger)titleNormalFont {
-    if (_titleNormalFont <= 0) {
-        _titleNormalFont = 12;
+- (NSInteger)titleFont {
+    if (_titleFont <= 0) {
+        _titleFont = 12;
     }
-    return _titleNormalFont;
+    return _titleFont;
 }
 
-- (NSInteger)titleSelectFont {
-    if (_titleSelectFont <= 0) {
-        _titleSelectFont = 12;
-    }
-    return _titleSelectFont;
-}
 
 - (UIColor *)titleNormalColor {
     if (!_titleNormalColor) {
@@ -66,29 +60,37 @@
 @property (nonatomic,assign)NSInteger currentIndex;
 @property (nonatomic, strong) NSArray<NSNumber *> *titleSelectColorGRBAArray;
 @property (nonatomic, strong) NSArray<NSNumber *> *titleNormalColorRGBAArray;
+@property (nonatomic,assign)id<PageTitleViewDelegate> delegate;
 
 @end
 
 
 @implementation PageTitleView
 
-- (instancetype)initWithFrame:(CGRect)frame titles:(NSArray *)titles configure:(PageTitleViewConfigure *)configure
-{
+- (instancetype)initWithFrame:(CGRect)frame delegate:(id<PageTitleViewDelegate>)delegate titles:(NSArray *)titles configure:(PageTitleViewConfigure *)configure {
     self = [super initWithFrame:frame];
     if (self) {
         self.titles = titles;
         self.configure = configure;
-        [self ComponentConfig];
+        self.delegate = delegate;
+        [self initDefault];
         [self setUpUI];
     }
     return self;
 }
 
-- (void)ComponentConfig {
- 
-    _titleSelectColorGRBAArray = [self getRGBAComponentsWithColor:self.configure.titleSelectColor];
-    _titleNormalColorRGBAArray = [self getRGBAComponentsWithColor:self.configure.titleNormalColor];
++ (instancetype)pageTitleViewWithframe:(CGRect)frame delegate:(id<PageTitleViewDelegate>)delegate titles:(NSArray *)titles configure:(PageTitleViewConfigure *)configure {
+    
+    return [[self alloc] initWithFrame:frame delegate:delegate titles:titles configure:configure];
 }
+
+
+- (void)initDefault {
+    _isGradientEffect = YES;
+    _isTextZoom = NO;
+    _titleTextScaling = 0.1;
+}
+
 
 - (void)setUpUI {
     
@@ -108,7 +110,7 @@
         UILabel * label = [UILabel new];
         label.text = self.titles[i];
         label.tag = i;
-        label.font = [UIFont systemFontOfSize:self.configure.titleNormalFont];
+        label.font = [UIFont systemFontOfSize:self.configure.titleFont];
         label.textColor = self.configure.titleNormalColor;
         label.textAlignment = NSTextAlignmentCenter;
         
@@ -180,31 +182,39 @@
     self.scrollLine.frame = frame;
     
     [self setupLabelStatus:sourceLabel targetLabel:targetLabel];
-    if (!(self.titleSelectColorGRBAArray.count < 4 || self.titleNormalColorRGBAArray.count < 4)) {
-        if (progress != 0) {
-            CGFloat titleHighlightedColorR = [self.titleSelectColorGRBAArray[0] floatValue];
-            CGFloat titleHighlightedColorG = [self.titleSelectColorGRBAArray[1] floatValue];
-            CGFloat titleHighlightedColorB = [self.titleSelectColorGRBAArray[2] floatValue];
-            CGFloat titleHighlightedColorA = [self.titleSelectColorGRBAArray[3] floatValue];
-            CGFloat titleNormalColorR = [self.titleNormalColorRGBAArray[0] floatValue];
-            CGFloat titleNormalColorG = [self.titleNormalColorRGBAArray[1] floatValue];
-            CGFloat titleNormalColorB = [self.titleNormalColorRGBAArray[2] floatValue];
-            CGFloat titleNormalColorA = [self.titleNormalColorRGBAArray[3] floatValue];
-            CGFloat RDistance = titleHighlightedColorR - titleNormalColorR;
-            CGFloat GDistance = titleHighlightedColorG - titleNormalColorG;
-            CGFloat BDistance = titleHighlightedColorB - titleNormalColorB;
-            CGFloat ADistance = titleHighlightedColorA - titleNormalColorA;
-            
-            sourceLabel.textColor = [UIColor colorWithRed:(titleNormalColorR+(RDistance*(1.0-progress)))/255.
-                                                            green:(titleNormalColorG+(GDistance*(1.0-progress)))/255.
-                                                             blue:(titleNormalColorB+(BDistance*(1.0-progress)))/255.
-                                                            alpha:titleNormalColorA+(ADistance*(1.0-progress))];
-            targetLabel.textColor = [UIColor colorWithRed:(titleNormalColorR+(RDistance*progress))/255.
-                                                             green:(titleNormalColorG+(GDistance*progress))/255.
-                                                              blue:(titleNormalColorB+(BDistance*progress))/255.
-                                                             alpha:titleNormalColorA+(ADistance*progress)];
+    //是否开启文字渐变
+    if (self.isGradientEffect) {
+        
+        _titleSelectColorGRBAArray = [self getRGBAComponentsWithColor:self.configure.titleSelectColor];
+        _titleNormalColorRGBAArray = [self getRGBAComponentsWithColor:self.configure.titleNormalColor];
+        
+        if (!(self.titleSelectColorGRBAArray.count < 4 || self.titleNormalColorRGBAArray.count < 4)) {
+            if (progress != 0) {
+                CGFloat titleHighlightedColorR = [self.titleSelectColorGRBAArray[0] floatValue];
+                CGFloat titleHighlightedColorG = [self.titleSelectColorGRBAArray[1] floatValue];
+                CGFloat titleHighlightedColorB = [self.titleSelectColorGRBAArray[2] floatValue];
+                CGFloat titleHighlightedColorA = [self.titleSelectColorGRBAArray[3] floatValue];
+                CGFloat titleNormalColorR = [self.titleNormalColorRGBAArray[0] floatValue];
+                CGFloat titleNormalColorG = [self.titleNormalColorRGBAArray[1] floatValue];
+                CGFloat titleNormalColorB = [self.titleNormalColorRGBAArray[2] floatValue];
+                CGFloat titleNormalColorA = [self.titleNormalColorRGBAArray[3] floatValue];
+                CGFloat RDistance = titleHighlightedColorR - titleNormalColorR;
+                CGFloat GDistance = titleHighlightedColorG - titleNormalColorG;
+                CGFloat BDistance = titleHighlightedColorB - titleNormalColorB;
+                CGFloat ADistance = titleHighlightedColorA - titleNormalColorA;
+                
+                sourceLabel.textColor = [UIColor colorWithRed:(titleNormalColorR+(RDistance*(1.0-progress)))/255.
+                                                        green:(titleNormalColorG+(GDistance*(1.0-progress)))/255.
+                                                         blue:(titleNormalColorB+(BDistance*(1.0-progress)))/255.
+                                                        alpha:titleNormalColorA+(ADistance*(1.0-progress))];
+                targetLabel.textColor = [UIColor colorWithRed:(titleNormalColorR+(RDistance*progress))/255.
+                                                        green:(titleNormalColorG+(GDistance*progress))/255.
+                                                         blue:(titleNormalColorB+(BDistance*progress))/255.
+                                                        alpha:titleNormalColorA+(ADistance*progress)];
+            }
         }
     }
+    
     
     _currentIndex = targetIndex;
   
@@ -212,13 +222,21 @@
 
 - (void)setupLabelStatus:(UILabel *)sourceLabel targetLabel:(UILabel *)targetLabel  {
 
-    sourceLabel.font = [UIFont systemFontOfSize:self.configure.titleNormalFont];
-    targetLabel.font = [UIFont systemFontOfSize:self.configure.titleSelectFont];
     sourceLabel.textColor = self.configure.titleNormalColor;
     targetLabel.textColor = self.configure.titleSelectColor;
     CGRect frame = self.scrollLine.frame;
     frame.size.height = self.configure.lineHight;
     self.scrollLine.frame = frame;
+    
+    //是否开启字体缩放
+    if (self.isTextZoom) {
+        [self.titleLabels enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            UILabel *btn = obj;
+            btn.transform = CGAffineTransformMakeScale(1, 1);
+        }];
+        targetLabel.transform = CGAffineTransformMakeScale(1 + self.titleTextScaling, 1 + self.titleTextScaling);
+    }
+
 }
 
 #pragma mark - setter/gettter

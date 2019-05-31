@@ -25,15 +25,13 @@
     CGFloat statusBarH = [[UIApplication sharedApplication] statusBarFrame].size.height;
     NSArray * titles = @[@"推荐",@"游戏",@"娱乐",@"音频",@"视频"];
     PageTitleViewConfigure * configure = [PageTitleViewConfigure new];
-    configure.titleNormalFont = 12;
-    configure.titleSelectFont = 15;
+    configure.titleFont = 12;
     configure.titleNormalColor = [UIColor grayColor];
     configure.titleSelectColor = [UIColor redColor];
     configure.lineColor = [UIColor redColor];
     configure.lineHight = 2;
     
-    _titleView = [[PageTitleView alloc] initWithFrame:CGRectMake(0, statusBarH, self.view.frame.size.width, 50) titles:titles configure:configure];
-    _titleView.delegate = self;
+    _titleView = [PageTitleView pageTitleViewWithframe:CGRectMake(0, statusBarH, self.view.frame.size.width, 50) delegate:self titles:titles configure:configure];
     [self.view addSubview:_titleView];
     
     NSMutableArray * VCs = [NSMutableArray array];

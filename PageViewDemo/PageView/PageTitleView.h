@@ -20,23 +20,37 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PageTitleViewConfigure : NSObject
 
-//其他设置
+/** 底部分割线，默认为 2.f */
 @property (nonatomic,assign)CGFloat lineHight;
+/** 底部分割线颜色，默认为 orangeColor */
 @property (nonatomic,copy)UIColor *lineColor;
+/** 标题普通状态颜色，默认为 blackColor */
 @property (nonatomic,copy)UIColor *titleNormalColor;
+/** 标题选中状态颜色，默认为 orangeColor */
 @property (nonatomic,copy)UIColor *titleSelectColor;
-@property (nonatomic,assign)NSInteger titleNormalFont;
-@property (nonatomic,assign)NSInteger titleSelectFont;
+/** 标题字体大小，默认为 12 */
+@property (nonatomic,assign)NSInteger titleFont;
 
 @end
 
 
 @interface PageTitleView : UIView
 
-@property (nonatomic,assign)id<PageTitleViewDelegate> delegate;
+/** 是否让标题按钮文字有渐变效果，默认为 YES */
+@property (nonatomic, assign) BOOL isGradientEffect;
+/** 是否开启标题按钮文字缩放效果，默认为 NO */
+@property (nonatomic, assign) BOOL isTextZoom;
+/** 标题文字缩放比，默认为 0.1f，取值范围 0 ～ 0.3f */
+@property (nonatomic, assign) CGFloat titleTextScaling;
 
 
-- (instancetype)initWithFrame:(CGRect)frame titles:(NSArray *)titles configure:(PageTitleViewConfigure *)configure;
+/** 初始化方法 */
+- (instancetype)initWithFrame:(CGRect)frame delegate:(id<PageTitleViewDelegate>)delegate titles:(NSArray *)titles configure:(PageTitleViewConfigure *)configure;
+
+/** 类方法，推荐使用 */
++ (instancetype)pageTitleViewWithframe:(CGRect)frame delegate:(id<PageTitleViewDelegate>)delegate titles:(NSArray *)titles configure:(PageTitleViewConfigure *)configure;
+
+/** 外部方法 */
 - (void)setTitleWithProgress:(CGFloat)progress sourceIndex:(NSInteger)sourceIndex targetIndex:(NSInteger)targetIndex;
 @end
 
